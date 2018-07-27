@@ -1,6 +1,7 @@
 const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
+const request = require('request')
 //Weather api
 const yargs = require('yargs');
 const axios = require('axios');
@@ -8,10 +9,8 @@ const axios = require('axios');
 const argv = yargs
   .options({
     address: {
-      demand: true,
       alias: 'a',
       descrive: 'Address to fetch weather for',
-      string: true,
     },
   })
   .help()
