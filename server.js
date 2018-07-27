@@ -1,6 +1,35 @@
 const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
+//Weather api
+const yargs = require('yargs');
+const axios = require('axios');
+
+const argv = yargs
+  .options({
+    address: {
+      demand: true,
+      alias: 'a',
+      descrive: 'Address to fetch weather for',
+      string: true,
+    },
+  })
+  .help()
+  .alias('help', 'h')
+  .argv;
+const googleApiKey = 'AIzaSyCwn-SI7Qi2DfGp77DhirijUp0tlSLqM_c';
+const encodedAddress = encodeURIComponent(argv.address);
+const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${googleApiKey}`;
+
+
+function farenheightToCelsius(temperature) {
+  return Math.round((((temperature - 32) * 5) / 9) * 100) / 100;
+}
+
+//Weather Api end
+
+
+
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -66,6 +95,54 @@ app.get('/weather-app', (req, res) => {
         welcomeMessage: 'Find the weather depending on what your city + country or address or postcode are! !'
     });
 });
+
+app.post('/weather-app', (req, res) => {
+    request(geocodeUrl, (err, responce, body) =>{
+        if (err){
+            axios.get(geocodeUrl).then((responce)=> {
+                if (responce.data.status === 'ZERO_RESULTS'){
+                    throw new Error('Unable to find that address');
+                }
+                const lat = response.data.results[0].geometry.location.lat;
+                const lng = response.data.results[0].geometry.location.lng;
+                 const weatherUrl = `https://api.darksky.net/forecast/b7982ff2d7186a3ca6b3bf1db8dfeea6/${lat},${lng}`;
+                 console.log(response.data.results[0].formatted_address);
+                return axios.get(weatherUrl);
+            }).then((responce) => {
+                const temperature = responce.data.currently.temperature;
+                const apparentTemperature = response.data.currently.apparentTemperature;
+                let weatherText =`It is currently ${temperature}.  It feels like ${apparentTemperature}.` +'\n'+`This would be ${farenheightToCelsius(temperature)} degrees Celsius. Which would feel like ${farenheightToCelsius(apparentTemperature)} degrees Celsius`;
+            }).catch((e)=> {
+                if (e.code === 'ENOTFOUND') {
+                    console.log('Unable to connect to API servers');
+                } else {
+                    console.log(e.message);
+                }
+            })
+        } else {
+            axios.get(geocodeUrl).then((responce)=> {
+                if (responce.data.status === 'ZERO_RESULTS'){
+                    throw new Error('Unable to find that address');
+                }
+                const lat = response.data.results[0].geometry.location.lat;
+                const lng = response.data.results[0].geometry.location.lng;
+                 const weatherUrl = `https://api.darksky.net/forecast/b7982ff2d7186a3ca6b3bf1db8dfeea6/${lat},${lng}`;
+                 console.log(response.data.results[0].formatted_address);
+                return axios.get(weatherUrl);
+            }).then((responce) => {
+                const temperature = responce.data.currently.temperature;
+                const apparentTemperature = response.data.currently.apparentTemperature;
+                let weatherText =`It is currently ${temperature}.  It feels like ${apparentTemperature}.` +'\n'+`This would be ${farenheightToCelsius(temperature)} degrees Celsius. Which would feel like ${farenheightToCelsius(apparentTemperature)} degrees Celsius`;
+            }).catch((e)=> {
+                if (e.code === 'ENOTFOUND') {
+                    console.log('Unable to connect to API servers');
+                } else {
+                    console.log(e.message);
+                }
+            })
+        }
+    })
+})
 
 
 app.get('/bad', (req,res) => {

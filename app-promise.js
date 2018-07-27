@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Weather App</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-  </head>
-  <body>
-      <script>
-          const yargs = require('yargs');
+const yargs = require('yargs');
 const axios = require('axios');
 
 const argv = yargs
@@ -59,17 +50,3 @@ Which would feel like ${farenheightToCelsius(apparentTemperature)} degrees Celsi
     console.log(e.message);
   }
 });
-
-      </script>
-      {{> header}}
-      <p>{{welcomeMessage}}</p>
-    <div class="container">
-      <fieldset>
-        <form action="/weather-app" method="post">
-          <input name="city" type="text" class="ghost-input" placeholder="Enter a City" required>
-          <input type="submit" class="ghost-button" value="Get Weather">
-        </form>
-      </fieldset>
-    </div>
-  </body>
-</html>
