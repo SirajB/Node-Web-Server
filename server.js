@@ -60,6 +60,14 @@ app.get('/projects', (req, res) => {
     });
 });
 
+app.get('/weather-app', (req, res) => {
+    res.render('weather-app.hbs',{
+        pageTitle: 'Weather App',
+        welcomeMessage: 'Find the weather depending on what your city + country or address or postcode are! !'
+    });
+});
+
+
 app.get('/bad', (req,res) => {
     res.send({
        errorMessage: 'Error cannot handle request'
