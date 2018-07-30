@@ -13,7 +13,7 @@ const argv = yargs
   .help()
   .alias('help', 'h')
   .argv;
-const googleApiKey = 'AIzaSyCwn-SI7Qi2DfGp77DhirijUp0tlSLqM_c';
+const googleApiKey = '******************************';
 const encodedAddress = encodeURIComponent(argv.address);
 const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${googleApiKey}`;
 
